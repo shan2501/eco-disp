@@ -1,0 +1,1 @@
+In a particular area, the power demand is given as D. This demand should be shared among M number of generators. Write a program to economically schedule D among M generators. Assume the cost characteristics and generation limits of M generators are given. Neglect the power loss in the transmission network.

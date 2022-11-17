@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Calculator</title>
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+        <script type="text/javascript" src="main.js"></script>
+    </head>
+
+    <body align=center>
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4"><legend><h1>ECONOMIC DISPATCH</h1></legend></div>
+        </div>
+        <br>
+
+        <div class="row">
+            <div class="row col-md-8 col-md-offset-2">
+                <div class="form-group" id="power-demand-div">
+                    <label class="control-label col-md-3 col-md-offset-2" for="powerDemand">Power demand:</label>
+                    <div class="col-md-4 input-group">
+                        <input id="power-demand-input" type="number" min="0" step="any" class="form-control" name="var_1" placeholder="&nbsp;0&nbsp;">
+                        <div class="input-group-btn" style="visibility: hidden;">
+                            <button class="btn btn-primary" type="button">Update</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" id="number-generators-div">
+                    <label class="control-label col-md-3 col-md-offset-2" for="numberGenerators">Number of generators:</label>
+                    <div class="col-md-4 input-group">
+                        <input id="number-generators-input" type="number" min="0" class="form-control" name="var_2" placeholder="&nbsp;3&nbsp;">
+                        <div class="input-group-btn">
+                            <button class="btn btn-primary" type="button" onclick="updateNumberOfGenerators()">Update</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <table id="input-coeffs-table" class="table" style="margin-top: 30px;">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Min Limit</th>
+                                <th scope="col">Max Limit</th>
+                                <th scope="col">Constant coefficient (a)</th>
+                                <th scope="col">Linear coefficient (b)</th>
+                                <th scope="col">Quadratic coefficient (c)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="input-coeffs-table-body">
+                            <tr>
+                                <th scope="row">1</th>
+                                <td><input id="gen-1-min" type="number" step="any" placeholder="10" class="form-control"></td>
+                                <td><input id="gen-1-max" type="number" step="any" placeholder="100" class="form-control"></td>
+                                <td><input id="gen-1-coeff-1" type="number" step="any" placeholder="20" class="form-control"></td>
+                                <td><input id="gen-1-coeff-2" type="number" step="any" placeholder="3" class="form-control"></td>
+                                <td><input id="gen-1-coeff-3" type="number" step="any" placeholder="0.001" class="form-control"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2</th>
+                                <td><input id="gen-2-min" type="number" step="any" placeholder="10" class="form-control"></td>
+                                <td><input id="gen-2-max" type="number" step="any" placeholder="100" class="form-control"></td>
+                                <td><input id="gen-2-coeff-1" type="number" step="any" placeholder="20" class="form-control"></td>
+                                <td><input id="gen-2-coeff-2" type="number" step="any" placeholder="3" class="form-control"></td>
+                                <td><input id="gen-2-coeff-3" type="number" step="any" placeholder="0.001" class="form-control"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">3</th>
+                                <td><input id="gen-3-min" type="number" step="any" placeholder="10" class="form-control"></td>
+                                <td><input id="gen-3-max" type="number" step="any" placeholder="100" class="form-control"></td>
+                                <td><input id="gen-3-coeff-1" type="number" step="any" placeholder="20" class="form-control"></td>
+                                <td><input id="gen-3-coeff-2" type="number" step="any" placeholder="3" class="form-control"></td>
+                                <td><input id="gen-3-coeff-3" type="number" step="any" placeholder="0.001" class="form-control"></td>
+                            </tr>
+                        </tbody>
+                    </table>                        
+                </div>
+
+                 <div class="form-group">
+                    <div class="col-xs-8 col-xs-offset-2">
+                        <input type="button" onclick="submit()" class="btn btn-success" value="Submit">
+                        <input type="button" onclick="reset()" class="btn btn-danger" value="Reset">
+                    </div>
+                </div>
+
+                <br>
+                <div id="error-list-div" class="col-md-8 col-md-offset-2" style="display: none; margin-top: 20px;">
+                    <br>
+                    <ul id="error-list" class="list-group list-group-horizontal justify-content-center">
+                        <li class="list-group-item list-group-item-danger">Error 1</li>
+                        <li class="list-group-item list-group-item-danger">Error 2</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+
+        <br>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2" style="margin-top: 30px;">
+                <table id="output-table" class="table table-hover" style="visibility: hidden;">
+                    <thead>
+                        <tr class="bg-primary">
+                            <th scope="col">#</th>
+                            <th scope="col">Optimal Units generated (in MW)</th>
+                            <th scope="col">Cost with Optimal Dispatch (in Rs)</th>
+                            <th scope="col">Cost with Equal Generation (in Rs)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="output-table-body">
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>100 MW</td>
+                            <td>1000</td>
+                            <td>1500</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">2</th>
+                            <td>200 MW</td>
+                            <td>2000</td>
+                            <td>1500</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">3</th>
+                            <td>300 MW</td>
+                            <td>3000</td>
+                            <td>4500</td>
+                        </tr>
+                    </tbody>
+                    <tfoot id="output-table-foot">
+                        <tr class="bg-info">
+                            <th scope="row">Sum</th>
+                            <td></td>
+                            <td>6000</td>
+                            <td>7500</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div class="col-md-2"></div>
+        </div>
+
+
+        <nav style="font-family: monospace;text-align: center; margin-top: 20px; border-bottom:5px double rgb(238, 236, 236)" align=center class="navbar navbar-light bg-light">
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <a class="active" href="#home">HOME</a>
+                <a href="Procedure.png">PROCEDURE</a>
+                <a href="team.html">TEAM</a>
+                <a href="https://github.com/Eswaraprasadp/economic-load-dispatch-js">SOURCE FILES</a>
+            </div>
+        </nav>
+        
+    </body>
+
+</html>
